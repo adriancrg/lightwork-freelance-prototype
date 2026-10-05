@@ -3,10 +3,10 @@
 A web marketplace where freelancers post service offers and buyers take them, talk to the seller in a chat and
 (in the design) pay through the **Bitcoin Lightning Network** with funds held in escrow until the work is delivered.
 
-It is a university-era project built with **PHP, MySQL and plain HTML/CSS/JavaScript**, run locally on **XAMPP**.
-The user accounts, offers with photos, search and the persisted buyer/seller chat work. The Lightning escrow
-(LND hold invoices) is **partially implemented**: the building blocks exist, but I have not wired them into a
-complete, tested payment flow. See [Status](#status) for exactly what works and what does not.
+It is a university-era project that my friend Lucas and I built together with **PHP, MySQL and plain
+HTML/CSS/JavaScript**, run locally on **XAMPP**. The user accounts, offers with photos, search and the persisted
+buyer/seller chat work. The Lightning escrow (LND hold invoices) is **written but untested**: the code was never run
+against a Lightning node and the flow is not complete. See [Status](#status) for exactly what works and what does not.
 
 ## Status
 
@@ -17,7 +17,7 @@ complete, tested payment flow. See [Status](#status) for exactly what works and 
 | Browse and filter offers | Working | Text search plus category and price filters, cards loaded from MySQL (`php/get_offers.php`) |
 | Offer detail page | Working | Photo gallery, seller, price, "take this offer" |
 | Take an offer and chat | Working | Creates a `conversations` row; messages stored in `chat_messages` and refreshed by AJAX polling every second |
-| Lightning hold-invoice escrow | **Partial** | Node.js scripts using the `lightning` package to create and settle an LND hold invoice, triggered from PHP. Amount is hard-coded to 1000 sats, the preimage is not persisted, the "Mark as paid" / "Cancel" buttons have no handlers and the status tracker is static. Not tested end to end |
+| Lightning hold-invoice escrow | **Untested, incomplete** | Node.js scripts using the `lightning` package to create and settle an LND hold invoice, triggered from PHP. Amount is hard-coded to 1000 sats, the preimage is not persisted, the "Mark as paid" / "Cancel" buttons have no handlers and the status tracker is static. Never run against a Lightning node |
 | User profile page | Mock-up | Static sample data, not read from the database |
 | Landing / about / contact pages | Working | Contact button points to a placeholder Telegram link |
 
@@ -28,7 +28,7 @@ complete, tested payment flow. See [Status](#status) for exactly what works and 
 * **Marketplace**: search and filter offers by category and price; each offer has its own detail page.
 * **Chat**: once a buyer takes an offer, buyer and seller get a conversation page whose messages are stored in the
   database and polled via AJAX.
-* **Lightning escrow (work in progress)**: the buyer pastes a hold invoice, a Node script registers it with the
+* **Lightning escrow (untested draft)**: the buyer pastes a hold invoice, a Node script registers it with the
   seller's LND node, and a second script settles it with the secret once the buyer confirms the service.
 * **Interface**: hand-written CSS (cards, gallery), custom web font, some responsive rules.
 
@@ -100,7 +100,7 @@ cp node.env.example node.env      # LND host, TLS cert and macaroon (base64); ne
 # so export them in the environment that runs PHP; it does not load node.env by itself.
 ```
 
-The scripts are only reachable from `taken_offer.php`. This part is experimental, see the known issues below.
+The scripts are only reachable from `taken_offer.php`. This part is an untested draft (it has never been run against a node), see the known issues below.
 
 ## Known issues and security notes
 
@@ -119,8 +119,9 @@ This is a learning project and is **not safe to expose to the internet** in its 
 
 ## Assets and licences
 
-The photos in `assets/images/` (category images) and the font `BNBobbieSans` were taken from third-party sources
-and are included only for this non-commercial demo; check their licences before reusing them. The Telegram link on
+The photos in `assets/images/` (category images) and the font `BNBobbieSans` come from third-party sources whose
+origin and licence were not recorded. They are included only for this non-commercial demo; do not reuse them without
+checking their licences, or replace them with your own. The Telegram link on
 the contact page is a placeholder.
 
 ## What I would do next
