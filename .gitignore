@@ -1,2 +1,15 @@
+# Secrets and local files
+node.env
+.env
+*.macaroon
+tls.cert
+
+# Dependencies
+lightning/node_modules/
+
+# User uploads (keep the folder, not the files)
+assets/offer_images/*
+!assets/offer_images/.gitkeep
+
 .DS_Store
 Thumbs.db
